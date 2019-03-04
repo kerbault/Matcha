@@ -36,30 +36,26 @@ if (req.body.login && req.body.firstName && req.body.lastName &&
                             connection.connect();
                             connection.query('CREATE DATABASE IF NOT EXISTS `Matcha`', null, function (err, res) {
                                 if (err) throw err;
-                                if (res.warningCount === 0) {
-                                    console.log('Database created');
-                                }
+
+
                             });
 
                         } else {
                             res.status(400).send(error, {error: 'invalid mail'})
                         }
                     } else {
-                        res.render('register.ejs', {error: 'invalid password'})
+                        res.status(400).send(error, {error: 'invalid password'})
                     }
                 } else {
-                    res.render('register.ejs', {error: 'invalid lastName'})
+                    res.status(400).send(error, {error: 'invalid lastName'})
                 }
             } else {
-                res.render('register.ejs', {error: 'invalid firstName'})
+                res.status(400).send(error, {error: 'invalid firstName'})
             }
         } else {
-            res.render('register.ejs', {error: 'invalid mail'})
+            res.status(400).send(error, {error: 'invalid mail'})
         }
     }
+} else {
+    res.status(400).send(error, {error: 'missing var'})
 }
-
-con.connect(function (err) {
-    if (err) throw err;
-    console.log("Connected!");
-});
