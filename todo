@@ -1,0 +1,94 @@
+Formulaire d’inscription:
+
+
+Login
+Email
+Nom
+Prenom
+Password
+
+Email de confirmation
+
+Formulaire de connexion:
+
+Login
+Password
+Forgot password
+
+Profil User:
+
+Genre
+Orientation sexuel (bisexualite si champs non renseigne)
+Courte biographie (140 caracteres)
+Des interets, avec des #, reutilisables.
+5 photos maximum dont 1 image de profil inclus
+
+Consigne:
+L’user doit pouvoir modifier toutes ses informations.
+Il doit pouvoir consulter le profil des personnes qui l’on like et visite.
+Score de popularite publique
+Geolocalisation a l’arrondissement pres. Choix de pouvoir activer ou non la geolocalisation mais devrat quand meme etre localise et pouvoir choisir son emplacement manuellement.
+
+L’user devrat remplir son profil, sinon il n’aura acces qu’a sa page profil.
+
+
+
+
+
+
+Algorythme de match:
+
+Liste de suggestion :
+Par ordre de priorite, l’algo devrat rapprocher les gens par:
+Orientaiton sexuelle
+Proximite geographique
+Centres d’interets via les #
+Score de popularite
+
+Sorting:
+Age
+Popularite
+Localisation
+Tag d’interets
+
+
+Recherche
+
+L’user doit pouvoir selectionner 1 ou plusieurs criteres de recherche:
+Intervalle d’age
+Intervalle score de popularite
+Localisation
+1 ou X tags
+
+
+A la consultation d’un profil:
+
+User 1 = visiteur
+User 2 = visite
+
+La page devrat contenir toutes les infos de l’user 2 consulte sauf mail et password.
+L’user 1 devrat apparaitre dans l’historique de l’user 2.
+
+Il doit pouvoir:
+Liker - Unliker, si l’user 2 a au moins 1 photo
+Si l’user 2 a deja like l’user 1, l’user 1 devrat voir sur le profil de l’user 2 qu’il a ete like.
+Consulter le score de popularite
+Voir si l’user 2 est online, sinon afficher si la derniere connexion de l’user 2
+Boutton de report “fake”
+Pouvoir bloquer l’user 2, il n’apparaitra plus pour l’user 1 et ne lui affichera donc pas de notif.
+
+
+Chat
+
+Les users peuvent chat apres un match et seulement un match en temps reel, une notif de nouveau message doit etre visible partout.
+Securiser les rooms. Seulement 2 users dans la meme room.
+
+Notifications:
+
+L’user doit etre notifie en temps reel :
+Like / Unlike
+Visite
+Message
+Match !!
+
+

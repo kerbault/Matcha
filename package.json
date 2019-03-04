@@ -1,0 +1,35 @@
+{
+  "name": "matcha",
+  "version": "0.1.0",
+  "description": "Dating website for a school project",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "htmlspecialchars": "^1.0.5",
+    "markdown": "^0.5.0",
+    "mysql": "^2.16.0",
+    "mysql-import": "^1.0.13",
+    "node-mysql-importer": "0.0.10",
+    "nodemon": "^1.18.10"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kerbault/Matcha.git"
+  },
+  "keywords": [
+    "matcha"
+  ],
+  "author": "kerbault",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kerbault/Matcha/issues"
+  },
+  "homepage": "https://github.com/kerbault/Matcha#readme"
+}
