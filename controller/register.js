@@ -1,20 +1,16 @@
-const express = require('express');
-const mysql = require('mysql');
-const eschtml = require('htmlspecialchars');
-const bodyParser = require('body-parser');
-const mysql_import = require('mysql-import');
+const Express = require('express');
+const Mysql = require('mysql');
+const Eschtml = require('htmlspecialchars');
 
-const server = express();
-const urlencodedParser = bodyParser.urlencoded({extended: false});
-const db_host = 'localhost';
-const db_user = 'root';
-const db_password = 'pass';
-const db_name = 'Matcha'
-const connection = mysql.createConnection({
-    host: db_host,
-    user: db_user,
-    password: db_password,
-    database: db_name
+const Db_host = 'localhost';
+const Db_user = 'root';
+const Db_password = 'pass';
+const Db_name = 'Matcha'
+const Connection = Mysql.createConnection({
+    host: Db_host,
+    user: Db_user,
+    password: Db_password,
+    database: Db_name
 });
 
 const register = (userName2, firstName2, lastName2, password2, confirmedPass2, email2) => {
@@ -27,11 +23,11 @@ const register = (userName2, firstName2, lastName2, password2, confirmedPass2, e
             if (password2 === confirmedPass2) {
 
                 // var security
-                let userName = eschtml(userName2),
-                    firstName = eschtml(firstName2),
-                    lastName = eschtml(lastName2),
-                    pass = eschtml(password2),
-                    email = eschtml(email2);
+                let userName = Eschtml(userName2);
+                let firstName = Eschtml(firstName2);
+                let lastName = Eschtml(lastName2);
+                let pass = Eschtml(password2);
+                let email = Eschtml(email2);
 
                 // regex definition
                 const userNameRgx = RegExp('^[a-z0-9]{2,50}$', 'i');
@@ -50,49 +46,43 @@ const register = (userName2, firstName2, lastName2, password2, confirmedPass2, e
 
                 // testing regex
 
-                if (userNameRgx.test(userName) === true) {
-                    if (nameRgx.test(firstName) === true) {
-                        if (nameRgx.test(lastName) === true) {
-                            if (passRgx.test(pass) === true) {
-                                if (emailRgx.test(email) === true) {
-                                    connection.connect((err) => {
-                                        if (err) throw err;
-                                        connection.query("SELECT COUNT(*) AS `userNameCount` FROM `users` WHERE `userName` = ?", [userName], (err, result) => {
-                                            if (err) throw err;
-                                            if (result[0].userNameCount != 0) reject(Error('userName used'));
-
-                                        });
-                                        connection.query("SELECT COUNT(*) AS `emailCount` FROM `users` WHERE `email` = ?", [email], (err, result) => {
-                                            if (err) throw err;
-                                            if (result[0].emailCount != 0) reject(Error('userName used'));
-                                        });
-                                        resolve(true);
-                                    })
-                                } else {
-                                    reject(Error('invalid email'));
-                                }
-                            } else {
-                                reject(Error('invalid password'));
-                            }
-                        } else {
-                            reject(Error('invalid lastName'));
-                        }
-                    } else {
-                        reject(Error('invalid firstName'));
-                    }
-                } else {
+                if (userNameRgx.test(userName) === false) {
                     reject('invalid userName');
+                } else if (nameRgx.test(firstName) === false) {
+                    reject(Error('invalid firstName'));
+                } else if (nameRgx.test(lastName) === false) {
+                    reject(Error('invalid lastName'));
+                } else if (passRgx.test(pass) === false) {
+                    reject(Error('invalid password'));
+                } else if (emailRgx.test(email) === false) {
+                    reject(Error('invalid email'));
+                } else {
+                    Connection.connect((err) => {
+                        if (err) throw err;
+                        Connection.query("SELECT COUNT(*) AS userNameCount FROM `users` WHERE `userName` = ?", [userName], (err, result) => {
+                            if (err) throw err;
+                            if (result[0].userNameCount != 0) reject(Error('userName used'));
+                            console.log(userName)
+                        });
+                        Connection.query("SELECT COUNT(*) AS emailCount FROM `users` WHERE `email` = ?", [email], (err, result) => {
+                            if (err) throw err;
+                            if (result[0].emailCount != 0) reject(Error('userName used'));
+                        });
+                        resolve(true);
+                    })
                 }
+            } else {
+                reject(Error('password and confirmedPass is different'));
             }
         } else {
-            reject(Error('missing var or invalid type'));
+            reject(Error('missing variable or invalid type'));
         }
     })
 }
 
 // A UTILISER POUR CALL FONCTION
 
-register("mitena", "kevin", "Erbault",
+register("Mitena", "kevin", "Erbault",
     "Test1234?", "Test1234?", "test@gemail.com").then(toto => {
     console.log(toto)
 }).catch(tata => {
