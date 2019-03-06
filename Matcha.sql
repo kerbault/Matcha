@@ -61,7 +61,7 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `Matcha`.`users` (
   `ID` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `userName` VARCHAR(50) COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
-  `password` VARCHAR(50) COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
+  `password` VARCHAR(255) COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
   `lastName` VARCHAR(50) COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
   `firstName` VARCHAR(50) COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
   `email` VARCHAR(255) COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
@@ -77,7 +77,6 @@ CREATE TABLE IF NOT EXISTS `Matcha`.`users` (
   `userStatus_ID` INT(10) UNSIGNED NULL DEFAULT '1',
   `longitude` DECIMAL(7,4) NULL DEFAULT NULL,
   `latitude` DECIMAL(7,4) NULL DEFAULT NULL,
-  `userscol` VARCHAR(45) NULL,
   PRIMARY KEY (`ID`),
   INDEX `fk_users_FK_orientations1_idx` (`orientations_ID` ASC),
   INDEX `fk_users_FK_genders1_idx` (`genders_ID` ASC),
@@ -92,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `Matcha`.`users` (
     FOREIGN KEY (`userStatus_ID`)
     REFERENCES `Matcha`.`userStatus` (`ID`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 2;
+AUTO_INCREMENT = 1;
 
 
 -- -----------------------------------------------------
