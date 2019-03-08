@@ -2,6 +2,7 @@ const Mysql = require('mysql');
 const Eschtml = require('htmlspecialchars');
 const bcrypt = require('bcrypt');
 const uuidv1 = require('uuid/v1');
+const sendmail = require('sendmail')({silent: true});
 
 const Db_host = 'localhost';
 const Db_user = 'root';
@@ -70,7 +71,7 @@ const register = (userNameNsfw, firstNameNsfw, lastNameNsfw, passwordNsfw, confi
                     );
                     const P2 = new Promise((resolve, reject) => {
                             Connection.query("SELECT COUNT(*) AS emailCount FROM `users` WHERE `email` = ?", [email], (err, result) => {
-                                if (err) throw err;
+                                if (err) reject(err);
                                 if (result[0].emailCount != 0) reject({9: 'email already used'});
                                 else resolve(true);
                             })
@@ -78,14 +79,24 @@ const register = (userNameNsfw, firstNameNsfw, lastNameNsfw, passwordNsfw, confi
                     );
                     Promise.all([P1, P2])
                         .then(() => {
+
                             let pass = bcrypt.hashSync(passTmp, 10);
                             let validKey = uuidv1();
-                            Connection.query("INSERT INTO `users` SET `userName` = ?, `password` =?,`lastName`=?, `firstName`=?,`email`=?,`validKey`=?",
-                                [userName, pass, lastName, firstName, email, validKey], (err, result) => {
-                                    if (err) throw err;
-                                    else resolve(true);
+
+                            Connection.query("INSERT INTO `users` SET `userName` = ?, `password` =?,`lastName`=?, `firstName`=?,`email`=?,`validKey`=?", [userName, pass, lastName, firstName, email, validKey], (err) => {
+                                if (err) reject(err);
+                                sendmail({
+                                    from: 'kerbault.contact@gmail.com',
+                                    to: email,
+                                    replyTo: 'jason@yourdomain.com',
+                                    subject: 'MailComposer sendmail',
+                                    html: 'Mail of test sendmail '
+                                }, function (err, reply) {
+                                    console.log(err && err.stack);
+                                    console.dir(reply);
+                                    resolve({0: true});
                                 })
-                            resolve({0: true});
+                            })
                         })
                         .catch(error => {
                             reject(error);
@@ -98,8 +109,8 @@ const register = (userNameNsfw, firstNameNsfw, lastNameNsfw, passwordNsfw, confi
 
 // A UTILISER POUR CALL FONCTION
 
-register("Mitena", "kevin", "Erbault",
-    "Test1234?", "Test1234?", "test@gmail.com").then(toto => {
+register("Angel", "kevin", "Erbault",
+    "Test1234?", "Test1234?", "scrap.kevin@gmail.com").then(toto => {
     console.log(toto)
 }).catch(tata => {
     console.log(tata)
