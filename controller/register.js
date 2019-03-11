@@ -15,6 +15,10 @@ const Connection = Mysql.createConnection({
     database: Db_name
 });
 
+//╔═════════════════════════════════════════════════════════════════╗
+//║ 					    First registration						║
+//╚═════════════════════════════════════════════════════════════════╝
+
 const register = (userNameNsfw, firstNameNsfw, lastNameNsfw, passwordNsfw, confirmedPassNsfw, emailNsfw) => {
     return new Promise((resolve, reject) => {
         if (typeof userNameNsfw !== "string" && typeof firstNameNsfw !== "string" && typeof lastNameNsfw !== "string" &&
@@ -88,12 +92,11 @@ const register = (userNameNsfw, firstNameNsfw, lastNameNsfw, passwordNsfw, confi
                                 sendmail({
                                     from: 'kerbault.contact@gmail.com',
                                     to: email,
-                                    replyTo: 'jason@yourdomain.com',
-                                    subject: 'MailComposer sendmail',
-                                    html: 'Mail of test sendmail '
-                                }, function (err, reply) {
-                                    console.log(err && err.stack);
-                                    console.dir(reply);
+                                    replyTo: 'kerbault.contact@gmail.com',
+                                    subject: 'Welcome on Matcha 💋',
+                                    html: 'Welcome on matcha ' + userName + '<br><br>Please click on the following link to verify your mail :<br>' + validKey
+                                }, (err) => {
+                                    if (err) reject({10: err});
                                     resolve({0: true});
                                 })
                             })
@@ -105,13 +108,52 @@ const register = (userNameNsfw, firstNameNsfw, lastNameNsfw, passwordNsfw, confi
             }
         }
     })
-}
+};
+
+//╔═════════════════════════════════════════════════════════════════╗
+//║ 					   Mail Verification    					║
+//╚═════════════════════════════════════════════════════════════════╝
+
+const verifyAccount = (validKeyNsfw) => {
+    return new Promise((resolve, reject) => {
+        if (typeof validKeyNsfw !== "string" || validKeyNsfw == '0') {
+            reject({1: 'missing variable or invalid type'});
+        } else {
+            let validKey = Eschtml(validKeyNsfw);
+
+            Connection.connect(null, (err) => {
+                if (err) reject(err);
+                Connection.query("SELECT COUNT(*) AS isValid FROM `users` WHERE `validKey` = ?", [validKey], (err, result) => {
+                    if (err) reject(err);
+                    if (result[0].isValid != 1) reject({2: 'Cannot verify account'});
+                    else {
+                        Connection.query("UPDATE `users` SET `validKey` = '0', `userStatus` = 2 WHERE `validKey` = ?", [validKey], (err) => {
+                            if (err) reject(err);
+                            else resolve({0: true});
+                        })
+                    }
+                })
+            })
+        }
+    })
+};
+
+//╔═════════════════════════════════════════════════════════════════╗
+//║ 					   Extended registration    				║
+//╚═════════════════════════════════════════════════════════════════╝
+
 
 // A UTILISER POUR CALL FONCTION
 
-register("Angel", "kevin", "Erbault",
-    "Test1234?", "Test1234?", "scrap.kevin@gmail.com").then(toto => {
-    console.log(toto)
-}).catch(tata => {
-    console.log(tata)
-})
+// register("Angeaalaaa", "Mitena", "Soulstar",
+//     "Test1234?", "Test1234?", "scrap.kevin@gmail.com").then(res => {
+//     console.log(res)
+// }).catch(err => {
+//     console.log(err)
+// });
+
+verifyAccount('0').then(res => {
+    console.log(res)
+}).catch(err => {
+    console.log(err)
+});
